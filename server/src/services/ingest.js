@@ -1,5 +1,4 @@
 import mammoth from "mammoth";
-import pdfParse from "pdf-parse/lib/pdf-parse.js";
 import { httpError } from "../utils/httpError.js";
 
 export async function extractText(filename, buffer) {
@@ -8,9 +7,14 @@ export async function extractText(filename, buffer) {
 
   if (extension === "pdf") {
     try {
+      // Lazy import avoids pdf-parse reading its test fixtures at module load
+      // time, which crashes in serverless environments (Vercel).
+      const { default: pdfParse } = await import("pdf-parse/lib/pdf-parse.js");
       const data = await pdfParse(buffer);
       text = data.text;
-    } catch {
+    } catch (err) {
+      // Re-throw our own user-facing error; swallow the underlying parse error.
+      if (err.expose) throw err;
       throw httpError(
         400,
         "Could not read this PDF. It may be damaged or malformed. Re-save it as a new PDF, or upload a DOCX or TXT file."
