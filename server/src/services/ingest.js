@@ -8,17 +8,16 @@ import { httpError } from "../utils/httpError.js";
  * an old PDF.js and uses require() calls that break in ESM environments.
  */
 async function extractPdfText(buffer) {
-  // Dynamic import keeps the heavy pdfjs-dist bundle out of the cold-start
+  // Dynamic imports keep the heavy pdfjs-dist bundle out of the cold-start
   // path for non-PDF requests.
   const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
-
-  // No web worker needed in a Node.js environment.
-  pdfjs.GlobalWorkerOptions.workerSrc = "";
+  await import("pdfjs-dist/legacy/build/pdf.worker.mjs");
 
   const loadingTask = pdfjs.getDocument({
     data: new Uint8Array(buffer),
-    // Suppress the "Setting up fake worker" console warning.
     verbosity: 0,
+    isEvalSupported: false,
+    useSystemFonts: true,
   });
 
   const pdf = await loadingTask.promise;
@@ -46,6 +45,7 @@ export async function extractText(filename, buffer) {
     try {
       text = await extractPdfText(buffer);
     } catch (err) {
+      console.error("PDF parse error:", err);
       if (err.expose) throw err;
       throw httpError(
         400,
