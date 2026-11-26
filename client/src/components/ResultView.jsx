@@ -34,7 +34,7 @@ export default function ResultView({ result }) {
               {result.features.map((feature, index) => (
                 <tr key={index}>
                   <td>{feature.name}</td>
-                  <td><span className={`priority priority-${feature.priority?.toLowerCase().replaceAll(" ", "-")}`}>{feature.priority}</span></td>
+                  <td><span className={`priority priority-${feature.priority?.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>{feature.priority}</span></td>
                   <td className="source-quote">“{feature.sourceQuote}”</td>
                 </tr>
               ))}
