@@ -219,6 +219,21 @@ npm test
 
 Tests cover API errors, file ingestion, Markdown export, schema normalization, analysis retries, and quote grounding. They do not call Gemini or MongoDB.
 
+## Planned improvements
+
+The following additions would make the product more useful for real delivery teams:
+
+- **User accounts and workspaces** — keep analyses private and organize work by client, project, or team.
+- **Rate limiting and usage controls** — protect the API from abuse and manage model usage costs.
+- **Editable briefs** — allow users to revise generated objectives, features, priorities, and milestones before sharing.
+- **PDF and DOCX exports** — create presentation-ready deliverables in addition to the current Markdown export.
+- **Shareable links** — let users send a read-only project brief to clients or collaborators.
+- **Requirements comparison** — compare a new client document with an earlier brief to identify changes in scope.
+- **Custom analysis templates** — tailor the output for discovery calls, software proposals, agency handoffs, or internal tickets.
+- **Project-management integrations** — send approved requirements to tools such as Jira, Linear, Trello, or Notion.
+- **Evaluation dashboard** — measure output quality against a curated set of requirements examples over time.
+- **Role-based access and audit history** — support larger teams that need controlled access and change tracking.
+
 ## Security and data notes
 
 - Keep `MONGODB_URI` and `GEMINI_API_KEY` in environment variables only.
