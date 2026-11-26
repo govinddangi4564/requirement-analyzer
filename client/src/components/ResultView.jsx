@@ -12,7 +12,7 @@ function List({ items }) {
 export default function ResultView({ result }) {
   return (
     <div className="result">
-      <section className="result-section">
+      <section className="result-section objectives-section">
         <div className="result-heading"><span className="result-index">01</span><h2>Objectives</h2></div>
         <List items={result.objectives} />
       </section>
@@ -35,7 +35,7 @@ export default function ResultView({ result }) {
                 <tr key={index}>
                   <td>{feature.name}</td>
                   <td><span className={`priority priority-${feature.priority?.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>{feature.priority}</span></td>
-                  <td className="source-quote">“{feature.sourceQuote}”</td>
+                  <td className="source-quote"><span>“{feature.sourceQuote}”</span></td>
                 </tr>
               ))}
             </tbody>
@@ -43,22 +43,22 @@ export default function ResultView({ result }) {
         )}
       </section>
 
-      <section className="result-section">
+      <section className="result-section technical-section">
         <div className="result-heading"><span className="result-index">03</span><h2>Technical requirements</h2></div>
         <List items={result.technicalRequirements} />
       </section>
 
-      <section className="result-section">
+      <section className="result-section stack-section">
         <div className="result-heading"><span className="result-index">04</span><h2>Suggested stack</h2></div>
         <List items={result.stackSuggestions} />
       </section>
 
-      <section className="result-section">
+      <section className="result-section milestones-section">
         <div className="result-heading"><span className="result-index">05</span><h2>Milestones</h2></div>
         <List items={result.milestones} />
       </section>
 
-      <section className="result-section">
+      <section className="result-section clarifications-section">
         <div className="result-heading"><span className="result-index">06</span><h2>Clarifications needed</h2></div>
         <List items={result.clarificationQuestions} />
       </section>
