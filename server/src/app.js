@@ -3,6 +3,12 @@ import analysesRouter from "./routes/analyses.js";
 
 const app = express();
 
+app.set("etag", false);
+app.use("/api", (req, res, next) => {
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
+
 app.use(express.json({ limit: "200kb" }));
 
 app.get("/api/health", (req, res) => {

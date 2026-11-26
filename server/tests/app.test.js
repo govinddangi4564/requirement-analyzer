@@ -24,6 +24,16 @@ test("unknown route returns JSON 404", async () => {
   assert.deepEqual(await res.json(), { error: "Not found" });
 });
 
+test("API responses are not cached or returned as 304", async () => {
+  const res = await fetch(`${base}/api/health`, {
+    headers: { "If-None-Match": '"cached-response"' },
+  });
+
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get("cache-control"), "no-store");
+  assert.equal(res.headers.get("etag"), null);
+});
+
 test("invalid analysis id returns 404 without querying the database", async () => {
   const res = await fetch(`${base}/api/analyses/not-an-id`);
   assert.equal(res.status, 404);
