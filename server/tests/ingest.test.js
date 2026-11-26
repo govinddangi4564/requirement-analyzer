@@ -14,3 +14,10 @@ test("unsupported type is rejected with status 400", async () => {
 test("empty file is rejected with status 400", async () => {
   await assert.rejects(() => extractText("brief.txt", Buffer.from("   ")), (error) => error.status === 400);
 });
+
+test("malformed PDF is rejected with a helpful message", async () => {
+  await assert.rejects(
+    () => extractText("brief.pdf", Buffer.from("%PDF-1.4\n%%EOF")),
+    (error) => error.status === 400 && /Could not read this PDF/.test(error.message)
+  );
+});

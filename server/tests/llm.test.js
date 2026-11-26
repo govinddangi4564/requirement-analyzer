@@ -12,17 +12,27 @@ test("returns grounded result on first try", async () => {
   assert.equal(calls.length, 1);
 });
 
-test("retries after invalid JSON and ungrounded output", async () => {
-  const invented = JSON.stringify(makeAnalysis("Users can pay with cryptocurrency."));
+test("retries once after invalid JSON", async () => {
   const good = JSON.stringify(makeAnalysis());
-  const { generate, calls } = scripted(["not json at all", invented, good]);
+  const { generate, calls } = scripted(["not json at all", good]);
 
   const result = await analyze(SOURCE, generate);
 
   assert.equal(result.features[0].sourceQuote, "Users must log in with email and password.");
-  assert.equal(calls.length, 3);
+  assert.equal(calls.length, 2);
   assert.match(calls[1], /not valid JSON/);
-  assert.match(calls[2], /not copied verbatim/);
+});
+
+test("retries once after an ungrounded quote", async () => {
+  const invented = JSON.stringify(makeAnalysis("Users can pay with cryptocurrency."));
+  const good = JSON.stringify(makeAnalysis());
+  const { generate, calls } = scripted([invented, good]);
+
+  const result = await analyze(SOURCE, generate);
+
+  assert.equal(result.features[0].sourceQuote, "Users must log in with email and password.");
+  assert.equal(calls.length, 2);
+  assert.match(calls[1], /not copied verbatim/);
 });
 
 test("throws AnalysisError after max attempts", async () => {

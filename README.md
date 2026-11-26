@@ -36,7 +36,7 @@ Feature quotes are checked against the original source
 Validated brief is saved in MongoDB and shown in the UI
 ```
 
-The analysis service uses a low-temperature JSON response and up to three attempts to produce a valid result. If the response is malformed or a feature quote cannot be found in the supplied source, it asks the model to correct the problem rather than saving an unverified analysis.
+The analysis service uses a low-temperature JSON response and at most one repair attempt to produce a valid result. If the response is malformed or a feature quote cannot be found in the supplied source, it asks the model to correct the problem rather than saving an unverified analysis. Rate-limit errors stop immediately instead of consuming more requests; temporary server errors are retried once.
 
 ## Features
 
@@ -120,8 +120,8 @@ Then update `.env` with your credentials:
 MONGODB_URI=mongodb+srv://USER:PASSWORD@cluster0.example.mongodb.net/requirement-analyzer
 GEMINI_API_KEY=your-gemini-api-key
 
-# Optional: override the configured default Gemini model
-GEMINI_MODEL=gemini-2.5-flash
+# Optional: override the default Gemini model
+GEMINI_MODEL=gemini-3.5-flash-lite
 ```
 
 Never commit `.env`. It is already excluded by `.gitignore`.

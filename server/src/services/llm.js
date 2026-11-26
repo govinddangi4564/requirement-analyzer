@@ -2,10 +2,10 @@ import { GoogleGenAI } from "@google/genai";
 import { AnalysisSchema } from "../schemas/analysis.js";
 import { findUngroundedFeatures } from "./verify.js";
 
-export const MAX_ATTEMPTS = 3;
-const DEFAULT_MODEL = "gemini-3.8-flash";
-const TRANSIENT_STATUSES = new Set([429, 500, 503, 504]);
-const RETRY_DELAYS_MS = [2000, 5000];
+export const MAX_ATTEMPTS = 2;
+const DEFAULT_MODEL = "gemini-3.5-flash-lite";
+const TRANSIENT_STATUSES = new Set([500, 503, 504]);
+const RETRY_DELAYS_MS = [2000];
 
 export const SYSTEM_PROMPT = `You analyze client requirements into a structured project plan.
 Return only a JSON object with exactly these keys:
@@ -67,12 +67,18 @@ export async function geminiGenerate(systemPrompt, userPrompt) {
       const response = await ai.models.generateContent(request);
       return response.text ?? "";
     } catch (error) {
+      if (Number(error?.status) === 429) {
+        throw new AnalysisError(
+          "Gemini rate limit or quota reached. Check your Google AI Studio usage limits and wait before trying again.",
+          429
+        );
+      }
       if (!isTransient(error)) {
         throw new AnalysisError(`Gemini request failed: ${error.message}`, 502);
       }
       if (attempt >= RETRY_DELAYS_MS.length) {
         throw new AnalysisError(
-          "Gemini is busy right now. Please try again in a minute, or set GEMINI_MODEL to a different model.",
+          "Gemini is temporarily unavailable. Please try again in a minute, or set GEMINI_MODEL to another available model.",
           503
         );
       }

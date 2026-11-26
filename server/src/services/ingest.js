@@ -7,8 +7,15 @@ export async function extractText(filename, buffer) {
   let text;
 
   if (extension === "pdf") {
-    const data = await pdfParse(buffer);
-    text = data.text;
+    try {
+      const data = await pdfParse(buffer);
+      text = data.text;
+    } catch {
+      throw httpError(
+        400,
+        "Could not read this PDF. It may be damaged or malformed. Re-save it as a new PDF, or upload a DOCX or TXT file."
+      );
+    }
   } else if (extension === "docx") {
     const result = await mammoth.extractRawText({ buffer });
     text = result.value;
