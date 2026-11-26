@@ -198,7 +198,7 @@ curl -X POST http://localhost:3001/api/analyses \
 1. Create a MongoDB Atlas cluster and database user. Configure network access so Vercel can connect.
 2. Create a Gemini API key in Google AI Studio.
 3. Push this project to GitHub.
-4. Import the repository in Vercel. Use the **Other** framework preset if prompted.
+4. Import the repository in Vercel. Set the **Root Directory** to the repository root (not `client`) so Vercel includes the `api/` function and root `vercel.json`. Use the **Other** framework preset if prompted.
 5. In **Project Settings → Environment Variables**, add:
    - `MONGODB_URI`
    - `GEMINI_API_KEY`
