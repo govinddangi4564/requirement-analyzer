@@ -40,15 +40,15 @@ The analysis service uses a low-temperature JSON response and at most one repair
 
 ## Features
 
-- Paste plain-text client conversations, requirement notes, or meeting summaries.
-- Upload **PDF**, **DOCX**, or **TXT** documents up to **4 MB**.
-- Prioritize features with the MoSCoW method.
-- Preserve a client source quote for each proposed feature.
-- Review recent analyses in a polished, responsive workspace.
-- Export briefs as Markdown or print/save them as PDF.
-- Validate model output and retry incomplete or ungrounded responses.
-- Store analyses in MongoDB Atlas through Mongoose.
-- Deploy the client and API together on Vercel.
+- **Paste or Upload**: Paste plain-text client conversations, requirement notes, or upload **PDF**, **DOCX**, or **TXT** documents (up to 4 MB).
+- **Extract Project Objectives**: Identify clear outcomes and high-level goals from client inputs.
+- **Identify Required Features**: Prioritize features with MoSCoW priorities (`Must`, `Should`, `Could`, `Won't`) grounded in client quotes.
+- **Generate Technical Requirements**: Capture constraints, architecture, APIs, integrations, and infrastructure needs.
+- **Suggest Technology Stack**: Recommend appropriate frontend, backend, database, and third-party tools based on the requirements.
+- **Generate Estimated Milestones**: Break down project execution into practical delivery phases and milestones.
+- **Highlight Missing Information**: Flag ambiguity, unstated decisions, and clarifying questions before starting development.
+- **Download & Share**: Export briefs as Markdown or print / save as PDF.
+- **History & Persistence**: Store, browse, and manage past briefs in MongoDB Atlas.
 
 ## Technology
 
@@ -57,7 +57,7 @@ The analysis service uses a low-temperature JSON response and at most one repair
 | Frontend | React 18, Vite, React Router |
 | Backend | Node.js, Express |
 | Database | MongoDB Atlas, Mongoose |
-| Document parsing | `pdf-parse`, `mammoth` |
+| Document parsing | `pdfjs-dist`, `mammoth` |
 | Analysis | Google Gemini via `@google/genai` |
 | Validation | Zod |
 | Testing | Node.js test runner |
